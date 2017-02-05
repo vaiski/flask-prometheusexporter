@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  prometheus:
+    build: ./prometheus
+    ports:
+      - 9090:9090
+      - 9091:9091
+      - 9093:9093
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+
+  flask_exporter:
+    build: ../.
+    restart: always
+    ports:
+      - 5000:5000
+      - 9202:9202
+    networks:
+      - backend
+
+networks:
+  backend:
